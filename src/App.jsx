@@ -18,7 +18,7 @@ import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import NavBar from "./components/NavBar";
 
-
+//work
 export default function App() {
   const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
