@@ -8,7 +8,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Create from "./pages/Create";
 import MyNotes from "./pages/MyNotes";
-import Navbar from "./components/NavBar";
 import ViewNote from "./pages/ViewNote";
 import UnlockNote from "./pages/UnlockNote";
 import Footer from "./components/Footer";
@@ -17,6 +16,7 @@ import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
+import Navbar from "./components/NavBar";
 
 
 export default function App() {

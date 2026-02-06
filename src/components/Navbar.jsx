@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
-export default function Navbar({ user }) {
+export default function NavBar({ user }) {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
