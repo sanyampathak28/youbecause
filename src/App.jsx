@@ -114,7 +114,7 @@ export default function App() {
           path="/admin"
           element={isAdmin ? <Admin /> : <Navigate to="/home" />}
         />
-
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>
