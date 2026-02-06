@@ -16,7 +16,7 @@ import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
-import Navbar from "./components/NavBar";
+import NavBar from "./components/NavBar";
 
 
 export default function App() {
@@ -80,7 +80,7 @@ export default function App() {
 
   return (
     <>
-      <Navbar user={user} />
+      <NavBar user={user} />
 
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
