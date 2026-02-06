@@ -17,6 +17,7 @@ import RefundPolicy from "./pages/RefundPolicy";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import NavBar from "./components/NavBar";
+import NotFound from "./pages/NotFound";
 
 //work
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [notesLoading, setNotesLoading] = useState(true);
 
 
   // 🔐 Auth listener
@@ -51,24 +53,27 @@ export default function App() {
 
   // 📦 Fetch all notes
   useEffect(() => {
-    
-    const fetchNotes = async () => {
-      const q = query(
-        collection(db, "notes"),
-        orderBy("createdAt", "desc")
-      );
+  const fetchNotes = async () => {
+    const q = query(
+      collection(db, "notes"),
+      orderBy("createdAt", "desc")
+    );
 
-      const snapshot = await getDocs(q);
-      setNotes(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-      );
-    };
+    const snapshot = await getDocs(q);
 
-    fetchNotes();
-  }, []);
+    setNotes(
+      snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+    );
+
+    setNotesLoading(false); // 👈 App decides this
+  };
+
+  fetchNotes();
+}, []);
+
 
   if (loading) {
     return (
@@ -86,7 +91,11 @@ export default function App() {
         <Route path="/" element={<Navigate to="/home" />} />
 
         {/* 👇 HOME AS LAYOUT */}
-        <Route path="/home" element={<Home notes={notes} />}>
+        <Route
+          path="/home"
+          element={<Home notes={notes} loading={notesLoading} />}
+        >
+
           <Route path="unlock/:id" element={<UnlockNote />} />
         </Route>
 

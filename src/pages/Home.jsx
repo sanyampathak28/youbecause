@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 
-export default function Home({ notes }) {
+export default function Home({ notes, loading }) {
   const [selectedNote, setSelectedNote] = useState(null);
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
@@ -26,16 +26,25 @@ export default function Home({ notes }) {
     }
   };
 
+  // 🔄 Loader while notes are loading
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Loading notes…
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-8 relative">
-      {/* 👇 This renders UnlockNote when route matches */}
+      {/* Renders UnlockNote when route matches */}
       <Outlet context={{ unlockedNote }} />
 
       <h1 className="text-3xl font-semibold mb-8 text-center">
         meant for someone ✨
       </h1>
 
-      {/* Cards */}
+      {/* Notes grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {notes.map((note) => (
           <div
@@ -48,7 +57,10 @@ export default function Home({ notes }) {
             className="cursor-pointer bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition"
           >
             <p className="text-gray-700 font-medium">
-              From <span className="font-semibold">{note.from || "Someone"}</span>
+              From{" "}
+              <span className="font-semibold">
+                {note.from || "Someone"}
+              </span>
             </p>
             <p className="text-gray-500 mt-1">
               To <span className="font-semibold">{note.to}</span>
