@@ -54,25 +54,30 @@ export default function App() {
   // 📦 Fetch all notes
   useEffect(() => {
   const fetchNotes = async () => {
-    const q = query(
-      collection(db, "notes"),
-      orderBy("createdAt", "desc")
-    );
+    try {
+      const q = query(
+        collection(db, "notes"),
+        orderBy("createdAt", "desc")
+      );
 
-    const snapshot = await getDocs(q);
+      const snapshot = await getDocs(q);
 
-    setNotes(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-    );
-
-    setNotesLoading(false); // 👈 App decides this
+      setNotes(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+      );
+    } catch (error) {
+      console.error("Failed to fetch notes:", error);
+    } finally {
+      setNotesLoading(false); // ✅ ALWAYS runs
+    }
   };
 
   fetchNotes();
 }, []);
+
 
 
   if (loading) {
