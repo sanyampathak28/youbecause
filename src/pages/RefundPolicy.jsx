@@ -1,4 +1,5 @@
-import LegalLayout from "./components/LegalLayout";
+import LegalLayout from "../LegalLayout";
+
 
 export default function RefundPolicy() {
   return (
