@@ -4,7 +4,8 @@ import { db } from "../firebase";
 
 export default function Admin() {
   const [price, setPrice] = useState(4900);
-  const [enabled, setEnabled] = useState(true);
+  const [paymentsEnabled, setPaymentsEnabled] = useState(true);
+  const [submissionsEnabled, setSubmissionsEnabled] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const ref = doc(db, "config", "payments");
@@ -13,8 +14,12 @@ export default function Admin() {
     const load = async () => {
       const snap = await getDoc(ref);
       if (snap.exists()) {
-        setPrice(snap.data().price);
-        setEnabled(snap.data().paymentsEnabled);
+        const data = snap.data();
+        setPrice(data.price);
+        setPaymentsEnabled(data.paymentsEnabled);
+        setSubmissionsEnabled(
+          data.submissionsEnabled !== false // default true
+        );
       }
       setLoading(false);
     };
@@ -22,13 +27,13 @@ export default function Admin() {
   }, []);
 
   const save = async () => {
-    console.log(enabled);
-    
     await updateDoc(ref, {
       price: Number(price),
-      enabled: enabled,
+      paymentsEnabled,
+      submissionsEnabled,
       updatedAt: serverTimestamp(),
     });
+
     alert("Updated successfully ✅");
   };
 
@@ -37,8 +42,9 @@ export default function Admin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-xl shadow max-w-sm w-full">
-        <h1 className="text-xl font-semibold mb-6">Admin – Payments</h1>
+        <h1 className="text-xl font-semibold mb-6">Admin – Settings</h1>
 
+        {/* PRICE */}
         <label className="text-sm">Price (₹)</label>
         <input
           type="number"
@@ -47,13 +53,24 @@ export default function Admin() {
           className="w-full border rounded p-2 mb-4"
         />
 
+        {/* PAYMENTS TOGGLE */}
+        <label className="flex items-center gap-2 mb-4">
+          <input
+            type="checkbox"
+            checked={paymentsEnabled}
+            onChange={(e) => setPaymentsEnabled(e.target.checked)}
+          />
+          Payments enabled
+        </label>
+
+        {/* SUBMISSIONS TOGGLE */}
         <label className="flex items-center gap-2 mb-6">
           <input
             type="checkbox"
-            checked={enabled}
-            onChange={(e) => setEnabled(e.target.checked)}
+            checked={submissionsEnabled}
+            onChange={(e) => setSubmissionsEnabled(e.target.checked)}
           />
-          Payments enabled
+          Submissions enabled
         </label>
 
         <button

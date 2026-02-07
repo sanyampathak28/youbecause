@@ -31,6 +31,9 @@ export default function Create() {
   const [paymentEnabled, setPaymentEnabled] = useState(false);
   const [price, setPrice] = useState(0);
 
+  const [submissionsEnabled, setSubmissionsEnabled] = useState(true);
+  const [configLoaded, setConfigLoaded] = useState(false);
+
   // 🔁 Restore draft
   useEffect(() => {
     const saved = localStorage.getItem(DRAFT_KEY);
@@ -44,19 +47,24 @@ export default function Create() {
     }
   }, []);
 
-  // 🔥 Fetch payment toggle + price
+  // 🔥 Fetch config (payments + submissions)
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const paymentSnap = await getDoc(doc(db, "config", "payments"));
+        const snap = await getDoc(doc(db, "config", "payments"));
 
-        setPaymentEnabled(
-          paymentSnap.exists() ? paymentSnap.data().enabled : false
-        );
-
-        setPrice(paymentSnap.exists() ? paymentSnap.data().price : 0);
+        if (snap.exists()) {
+          const data = snap.data();
+          setPaymentEnabled(data.paymentsEnabled);
+          setPrice(data.price || 0);
+          setSubmissionsEnabled(data.submissionsEnabled !== false);
+        } else {
+          setSubmissionsEnabled(true);
+        }
       } catch (err) {
         console.error("Config fetch failed", err);
+      } finally {
+        setConfigLoaded(true);
       }
     };
 
@@ -71,8 +79,13 @@ export default function Create() {
     navigate("/login");
   };
 
-  // 🧾 Save note (free OR paid)
+  // 🧾 Save note
   const createNote = async (paid) => {
+    if (!submissionsEnabled) {
+      alert("Submissions are currently closed.");
+      return;
+    }
+
     const user = auth.currentUser;
     if (!user) return;
 
@@ -93,6 +106,11 @@ export default function Create() {
 
   // 💳 Create / Skip payment
   const startPayment = async () => {
+    if (!submissionsEnabled) {
+      alert("Submissions are currently closed.");
+      return;
+    }
+
     if (!from || !to || !question || !answer || !note) {
       alert("Please fill all fields.");
       return;
@@ -170,6 +188,27 @@ export default function Create() {
     }
   };
 
+  // ⛔ Submissions closed UI
+  if (configLoaded && !submissionsEnabled) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+        <div className="bg-white max-w-md w-full rounded-xl p-6 shadow-sm text-center">
+          <h1 className="text-xl font-semibold mb-2">
+            Submissions are closed
+          </h1>
+          <p className="text-sm text-gray-500">
+            We’re not accepting new notes right now.  
+            Please check back later.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!configLoaded) {
+    return <p className="p-6">Loading…</p>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center p-6">
       <div className="bg-white max-w-xl w-full rounded-xl p-6 shadow-sm">
@@ -183,26 +222,26 @@ export default function Create() {
 
         <Field label="From" value={from} setValue={setFrom} hint="Your name" />
         <Field label="To" value={to} setValue={setTo} hint="Who is this for?" />
+
         <Field
-        label="Question"
-        value={question}
-        setValue={setQuestion}
-        hint="A question only they can answer"
-      />
-      <p className="text-xs text-gray-500 mt-1 mb-3">
-        This question will be asked before the note is revealed.
-      </p>
+          label="Question"
+          value={question}
+          setValue={setQuestion}
+          hint="A question only they can answer"
+        />
+        <p className="text-xs text-gray-500 mt-1 mb-3">
+          This question will be asked before the note is revealed.
+        </p>
 
-      <Field
-        label="Answer"
-        value={answer}
-        setValue={setAnswer}
-        hint="Correct answer to unlock"
-      />
-      <p className="text-xs text-gray-500 mt-1 mb-4">
-        The note unlocks only if this answer matches exactly.
-      </p>
-
+        <Field
+          label="Answer"
+          value={answer}
+          setValue={setAnswer}
+          hint="Correct answer to unlock"
+        />
+        <p className="text-xs text-gray-500 mt-1 mb-4">
+          The note unlocks only if this answer matches exactly.
+        </p>
 
         <div className="mb-4">
           <label className="text-sm text-gray-600">Note</label>
@@ -217,11 +256,9 @@ export default function Create() {
         <button
           onClick={startPayment}
           disabled={loading}
-          className="w-full mt-4 bg-black text-white py-3 rounded-md hover:bg-gray-900 transition"
+          className="w-full mt-4 bg-black text-white py-3 rounded-md hover:bg-gray-900 transition disabled:opacity-60"
         >
-          {loading
-            ? "Processing..."
-            : "Create"}
+          {loading ? "Processing..." : "Create"}
         </button>
 
         {!auth.currentUser && (
