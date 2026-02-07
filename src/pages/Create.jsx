@@ -184,17 +184,25 @@ export default function Create() {
         <Field label="From" value={from} setValue={setFrom} hint="Your name" />
         <Field label="To" value={to} setValue={setTo} hint="Who is this for?" />
         <Field
-          label="Question"
-          value={question}
-          setValue={setQuestion}
-          hint="A question only they can answer"
-        />
-        <Field
-          label="Answer"
-          value={answer}
-          setValue={setAnswer}
-          hint="Correct answer to unlock"
-        />
+        label="Question"
+        value={question}
+        setValue={setQuestion}
+        hint="A question only they can answer"
+      />
+      <p className="text-xs text-gray-500 mt-1 mb-3">
+        This question will be asked before the note is revealed.
+      </p>
+
+      <Field
+        label="Answer"
+        value={answer}
+        setValue={setAnswer}
+        hint="Correct answer to unlock"
+      />
+      <p className="text-xs text-gray-500 mt-1 mb-4">
+        The note unlocks only if this answer matches exactly.
+      </p>
+
 
         <div className="mb-4">
           <label className="text-sm text-gray-600">Note</label>
