@@ -40,7 +40,7 @@ export default function MyNotes() {
   };
 
   const copyLink = (id) => {
-    const url = `www.youbecause.in/note/${id}`;
+    const url = `https://www.youbecause.in/note/${id}`;
     navigator.clipboard.writeText(url);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
@@ -50,24 +50,51 @@ export default function MyNotes() {
     <div className="min-h-screen bg-gray-50 p-6">
       <h1 className="text-2xl font-semibold mb-6">My Notes 💌</h1>
 
+      {notes.length === 0 && (
+        <p className="text-gray-500">You haven’t created any notes yet.</p>
+      )}
+
       {notes.map((note) => {
-        const shareUrl = `www.youbecause.in/note/${note.id}`;
+        const shareUrl = `https://www.youbecause.in/note/${note.id}`;
 
         return (
           <div
             key={note.id}
-            className="bg-white border rounded-xl p-4 mb-4 shadow-sm"
+            className="bg-white border rounded-xl p-5 mb-5 shadow-sm"
           >
-            <p className="font-medium text-gray-800">
-              From {note.from} → To {note.to}
+            {/* HEADER */}
+            <p className="font-medium text-gray-800 mb-1">
+              From <span className="font-semibold">{note.from}</span> →{" "}
+              <span className="font-semibold">{note.to}</span>
             </p>
 
-            <p className="text-sm text-gray-500 mt-1">
-              {note.question}
+            {/* QUESTION */}
+            <p className="text-sm text-gray-600 italic">
+              “{note.question}”
             </p>
 
-            {/* 🔗 SHARE LINK */}
-            <div className="mt-3 flex items-center gap-2 text-sm">
+            {/* ANSWER (PRIVATE) */}
+            <div className="mt-4">
+              <p className="text-xs text-gray-400 mb-1">
+                Answer (only visible to you)
+              </p>
+              <div className="text-sm text-gray-700 bg-gray-50 border rounded p-2">
+                {note.answer}
+              </div>
+            </div>
+
+            {/* NOTE CONTENT */}
+            <div className="mt-4">
+              <p className="text-xs text-gray-400 mb-1">
+                Your note
+              </p>
+              <div className="text-sm text-gray-800 whitespace-pre-wrap bg-pink-50 border border-pink-100 rounded p-3">
+                {note.note}
+              </div>
+            </div>
+
+            {/* SHARE LINK */}
+            <div className="mt-4 flex items-center gap-2 text-sm">
               <input
                 readOnly
                 value={shareUrl}
@@ -82,7 +109,8 @@ export default function MyNotes() {
               </button>
             </div>
 
-            <div className="flex justify-end mt-3">
+            {/* ACTIONS */}
+            <div className="flex justify-end mt-4">
               <button
                 onClick={() => deleteNote(note.id)}
                 className="text-sm text-red-500 hover:underline"
