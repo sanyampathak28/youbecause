@@ -15,7 +15,7 @@ export default function RefundPolicy() {
       </p>
 
       <p>
-        Email: <strong>support@youbecause.app</strong>
+        Email: <strong>support@youbecause.in</strong>
       </p>
     </LegalLayout>
   );

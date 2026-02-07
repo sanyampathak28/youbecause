@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
 
       <p>
         If you have questions, contact us at{" "}
-        <strong>support@youbecause.app</strong>.
+        <strong>support@youbecause.in</strong>.
       </p>
     </LegalLayout>
   );
