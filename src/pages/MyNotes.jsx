@@ -68,12 +68,11 @@ export default function MyNotes() {
               <span className="font-semibold">{note.to}</span>
             </p>
 
-            {/* QUESTION */}
-            <p className="text-sm text-gray-600 italic">
+            
+            {/* <p className="text-sm text-gray-600 italic">
               “{note.question}”
             </p>
 
-            {/* ANSWER (PRIVATE) */}
             <div className="mt-4">
               <p className="text-xs text-gray-400 mb-1">
                 Answer (only visible to you)
@@ -81,7 +80,7 @@ export default function MyNotes() {
               <div className="text-sm text-gray-700 bg-gray-50 border rounded p-2">
                 {note.answer}
               </div>
-            </div>
+            </div> */}
 
             {/* NOTE CONTENT */}
             <div className="mt-4">

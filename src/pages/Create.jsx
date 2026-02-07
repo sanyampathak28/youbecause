@@ -23,8 +23,8 @@ export default function Create() {
 
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  // const [question, setQuestion] = useState("");
+  // const [answer, setAnswer] = useState("");
   const [note, setNote] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -33,6 +33,33 @@ export default function Create() {
 
   const [submissionsEnabled, setSubmissionsEnabled] = useState(true);
   const [configLoaded, setConfigLoaded] = useState(false);
+  const PREDEFINED_QA = [
+  { q: "What is 5 + 7?", a: "12" },
+  { q: "What is 10 + 30?", a: "40" },
+  { q: "What is 25 - 9?", a: "16" },
+  { q: "What is 8 × 6?", a: "48" },
+  { q: "What is 49 ÷ 7?", a: "7" },
+
+  { q: "What is 15 + 5?", a: "20" },
+  { q: "What is 100 - 64?", a: "36" },
+  { q: "What is 9 × 9?", a: "81" },
+  { q: "What is 72 ÷ 8?", a: "9" },
+  { q: "What is 14 + 26?", a: "40" },
+
+  { q: "What is 50 - 23?", a: "27" },
+  { q: "What is 6 × 7?", a: "42" },
+  { q: "What is 81 ÷ 9?", a: "9" },
+  { q: "What is 18 + 22?", a: "40" },
+  { q: "What is 90 - 45?", a: "45" },
+
+  { q: "What is 4 × 12?", a: "48" },
+  { q: "What is 63 ÷ 7?", a: "9" },
+  { q: "What is 11 + 19?", a: "30" },
+  { q: "What is 70 - 28?", a: "42" },
+  { q: "What is 16 ÷ 4?", a: "4" },
+];
+  var question = "";
+  var answer = "";
 
   // 🔁 Restore draft
   useEffect(() => {
@@ -110,7 +137,11 @@ export default function Create() {
       alert("Submissions are currently closed.");
       return;
     }
-
+    var randomIndex = Math.floor(Math.random() * PREDEFINED_QA.length);
+    question = PREDEFINED_QA[randomIndex].q;
+    answer = PREDEFINED_QA[randomIndex].a;
+    // console.log(from, to, question, answer, note);
+    
     if (!from || !to || !question || !answer || !note) {
       alert("Please fill all fields.");
       return;
@@ -223,7 +254,7 @@ export default function Create() {
         <Field label="From" value={from} setValue={setFrom} hint="Your name" />
         <Field label="To" value={to} setValue={setTo} hint="Who is this for?" />
 
-        <Field
+        {/* <Field
           label="Question"
           value={question}
           setValue={setQuestion}
@@ -241,7 +272,7 @@ export default function Create() {
         />
         <p className="text-xs text-gray-500 mt-1 mb-4">
           The note unlocks only if this answer matches exactly.
-        </p>
+        </p> */}
 
         <div className="mb-4">
           <label className="text-sm text-gray-600">Note</label>

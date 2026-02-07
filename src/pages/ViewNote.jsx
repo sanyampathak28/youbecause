@@ -55,10 +55,11 @@ export default function ViewNote() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="bg-white rounded-xl shadow-sm p-6 w-full max-w-lg">
         <h2 className="text-xl font-semibold mb-2 text-center">
-          Someone left you a note 💌
+          {note.from} left you a note 💌
         </h2>
-
         <p className="text-gray-800 mb-4 text-center font-medium">
+        Lets do some Maths before we change your mood!
+        <br />
           {note.question}
         </p>
 
